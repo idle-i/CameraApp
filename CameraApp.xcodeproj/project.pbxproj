@@ -15,6 +15,7 @@
 		378CDC7D298826F100FF1B37 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378CDC7C298826F100FF1B37 /* BottomView.swift */; };
 		378CDC7F2988273800FF1B37 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378CDC7E2988273800FF1B37 /* BaseView.swift */; };
 		378CDC8129882C7F00FF1B37 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378CDC8029882C7F00FF1B37 /* CaptureButton.swift */; };
+		3794DDA6298A940D00DA0BE7 /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3794DDA5298A940D00DA0BE7 /* CameraService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		378CDC7C298826F100FF1B37 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
 		378CDC7E2988273800FF1B37 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		378CDC8029882C7F00FF1B37 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
+		3794DDA5298A940D00DA0BE7 /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				378CDC7B2988200400FF1B37 /* Views */,
 				378CDC7A29881FF700FF1B37 /* Supporting Files */,
 				378CDC662987FDE200FF1B37 /* CameraViewController.swift */,
+				3794DDA5298A940D00DA0BE7 /* CameraService.swift */,
 				378CDC702987FDE300FF1B37 /* Info.plist */,
 			);
 			path = CameraApp;
@@ -83,10 +86,18 @@
 			isa = PBXGroup;
 			children = (
 				378CDC7E2988273800FF1B37 /* BaseView.swift */,
+				3794DDA9298A95AC00DA0BE7 /* Bottom View */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3794DDA9298A95AC00DA0BE7 /* Bottom View */ = {
+			isa = PBXGroup;
+			children = (
 				378CDC7C298826F100FF1B37 /* BottomView.swift */,
 				378CDC8029882C7F00FF1B37 /* CaptureButton.swift */,
 			);
-			path = Views;
+			path = "Bottom View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +176,7 @@
 				378CDC652987FDE200FF1B37 /* SceneDelegate.swift in Sources */,
 				378CDC8129882C7F00FF1B37 /* CaptureButton.swift in Sources */,
 				378CDC7D298826F100FF1B37 /* BottomView.swift in Sources */,
+				3794DDA6298A940D00DA0BE7 /* CameraService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

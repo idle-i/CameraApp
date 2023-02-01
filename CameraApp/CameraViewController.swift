@@ -13,6 +13,10 @@ fileprivate struct Constants {
 
 final class CameraViewController: UIViewController {
     
+    // MARK: - Private Properties
+    
+    private let cameraService = CameraService()
+    
     // MARK: - Views
     
     private lazy var bottomView: BottomView = {
@@ -29,18 +33,27 @@ final class CameraViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        view.addSubview(bottomView)
+        setupView()
+        setupConstraints()
         
-        NSLayoutConstraint.activate([
-            bottomView.heightAnchor.constraint(equalToConstant: 160),
-            bottomView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bottomView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        cameraService.delegate = self
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        cameraService.previewLayer?.frame = view.layer.frame
     }
     
     // MARK: - Private Methods
+    
+    private func setupPreview() {
+        if let previewLayer = cameraService.previewLayer {
+            view.layer.insertSublayer(previewLayer, below: bottomView.layer)
+            
+            view.setNeedsLayout()
+        }
+    }
     
     private func generateVibration() {
         let generator = UIImpactFeedbackGenerator(style: Constants.vibrationType)
@@ -49,9 +62,38 @@ final class CameraViewController: UIViewController {
     }
 }
 
+extension CameraViewController {
+    
+    func setupView() {
+        view.addSubview(bottomView)
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            bottomView.heightAnchor.constraint(equalToConstant: 160),
+            bottomView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+}
+
 extension CameraViewController: BottomViewDelegate {
     
     func captureButtonTapped() {
         generateVibration()
+        
+        cameraService.capturePicture()
+    }
+}
+
+extension CameraViewController: CameraServiceDelegate {
+    
+    func previewLayerDidLoad() {
+        setupPreview()
+    }
+    
+    func didCapturePhoto(image: UIImage) {
+        bottomView.setLastCapturedImage(image)
     }
 }

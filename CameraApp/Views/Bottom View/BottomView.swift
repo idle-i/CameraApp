@@ -27,6 +27,16 @@ final class BottomView: UIView {
         
         return view
     }()
+    
+    private lazy var lastCapturedImage: UIImageView = {
+        let view = UIImageView()
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.white
+        view.layer.cornerRadius = 6
+        
+        return view
+    }()
 
     // MARK: - Initializers
     
@@ -44,6 +54,12 @@ final class BottomView: UIView {
         setupConstraints()
     }
     
+    // MARK: - Public Methods
+    
+    func setLastCapturedImage(_ image: UIImage) {
+        lastCapturedImage.image = image
+    }
+    
     // MARK: - Callbacks
     
     @objc private func didTapCaptureButton() {
@@ -59,6 +75,7 @@ extension BottomView: BaseView {
         backgroundColor = UIColor.black.withAlphaComponent(0.5)
         
         addSubview(captureButton)
+        addSubview(lastCapturedImage)
     }
     
     func setupConstraints() {
@@ -66,7 +83,12 @@ extension BottomView: BaseView {
             captureButton.widthAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4),
             captureButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4),
             captureButton.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
-            captureButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor)
+            captureButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+            
+            lastCapturedImage.widthAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3),
+            lastCapturedImage.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3),
+            lastCapturedImage.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+            lastCapturedImage.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 32)
         ])
     }
 }

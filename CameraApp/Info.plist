@@ -19,5 +19,8 @@
 			</array>
 		</dict>
 	</dict>
+    
+    <key>NSCameraUsageDescription</key>
+    <string>Allow our app to use your camera</string>
 </dict>
 </plist>

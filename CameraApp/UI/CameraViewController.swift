@@ -17,6 +17,8 @@ final class CameraViewController: UIViewController {
     
     private let cameraService = CameraService()
     
+    private var lastCapturedImage: UIImage?
+    
     // MARK: - Views
     
     private lazy var bottomView: BottomView = {
@@ -81,9 +83,21 @@ extension CameraViewController {
 extension CameraViewController: BottomViewDelegate {
     
     func captureButtonTapped() {
+        bottomView.setCapturingPhotoState(true)
+        
         generateVibration()
         
         cameraService.capturePicture()
+    }
+    
+    func lastCapturedImageTapped() {
+        let controller = BrowsingViewController()
+        
+        if let lastCapturedImage = self.lastCapturedImage {
+            controller.setImage(lastCapturedImage)
+        }
+
+        present(controller, animated: true)
     }
 }
 
@@ -94,6 +108,9 @@ extension CameraViewController: CameraServiceDelegate {
     }
     
     func didCapturePhoto(image: UIImage) {
+        lastCapturedImage = image
+        
         bottomView.setLastCapturedImage(image)
+        bottomView.setCapturingPhotoState(false)
     }
 }

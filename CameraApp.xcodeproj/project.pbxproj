@@ -16,6 +16,7 @@
 		378CDC7F2988273800FF1B37 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378CDC7E2988273800FF1B37 /* BaseView.swift */; };
 		378CDC8129882C7F00FF1B37 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378CDC8029882C7F00FF1B37 /* CaptureButton.swift */; };
 		3794DDA6298A940D00DA0BE7 /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3794DDA5298A940D00DA0BE7 /* CameraService.swift */; };
+		3794DDAB298AA9C300DA0BE7 /* BrowsingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3794DDAA298AA9C300DA0BE7 /* BrowsingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		378CDC7E2988273800FF1B37 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		378CDC8029882C7F00FF1B37 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
 		3794DDA5298A940D00DA0BE7 /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
+		3794DDAA298AA9C300DA0BE7 /* BrowsingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,10 +64,9 @@
 		378CDC612987FDE200FF1B37 /* CameraApp */ = {
 			isa = PBXGroup;
 			children = (
-				378CDC7B2988200400FF1B37 /* Views */,
+				3794DDAD298AB0EB00DA0BE7 /* Services */,
+				3794DDAC298AAF4500DA0BE7 /* UI */,
 				378CDC7A29881FF700FF1B37 /* Supporting Files */,
-				378CDC662987FDE200FF1B37 /* CameraViewController.swift */,
-				3794DDA5298A940D00DA0BE7 /* CameraService.swift */,
 				378CDC702987FDE300FF1B37 /* Info.plist */,
 			);
 			path = CameraApp;
@@ -98,6 +99,24 @@
 				378CDC8029882C7F00FF1B37 /* CaptureButton.swift */,
 			);
 			path = "Bottom View";
+			sourceTree = "<group>";
+		};
+		3794DDAC298AAF4500DA0BE7 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				378CDC7B2988200400FF1B37 /* Views */,
+				378CDC662987FDE200FF1B37 /* CameraViewController.swift */,
+				3794DDAA298AA9C300DA0BE7 /* BrowsingViewController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		3794DDAD298AB0EB00DA0BE7 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3794DDA5298A940D00DA0BE7 /* CameraService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,6 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				378CDC672987FDE200FF1B37 /* CameraViewController.swift in Sources */,
+				3794DDAB298AA9C300DA0BE7 /* BrowsingViewController.swift in Sources */,
 				378CDC632987FDE200FF1B37 /* AppDelegate.swift in Sources */,
 				378CDC7F2988273800FF1B37 /* BaseView.swift in Sources */,
 				378CDC652987FDE200FF1B37 /* SceneDelegate.swift in Sources */,
@@ -328,7 +348,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.idle-i.CameraApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -360,7 +380,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.idle-i.CameraApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

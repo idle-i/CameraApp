@@ -9,6 +9,7 @@ import UIKit
 
 protocol BottomViewDelegate {
     func captureButtonTapped()
+    func lastCapturedImageTapped()
 }
 
 final class BottomView: UIView {
@@ -34,6 +35,19 @@ final class BottomView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.white
         view.layer.cornerRadius = 6
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapLastCapturedImage)))
+        
+        return view
+    }()
+    
+    private lazy var lastCapturedImageLoading: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        
+        view.color = UIColor.gray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.startAnimating()
+        view.isHidden = true
         
         return view
     }()
@@ -60,10 +74,20 @@ final class BottomView: UIView {
         lastCapturedImage.image = image
     }
     
+    func setCapturingPhotoState(_ state: Bool) {
+        lastCapturedImageLoading.isHidden = !state
+        
+        captureButton.isUserInteractionEnabled = !state
+    }
+    
     // MARK: - Callbacks
     
     @objc private func didTapCaptureButton() {
         delegate?.captureButtonTapped()
+    }
+    
+    @objc private func didTapLastCapturedImage() {
+        delegate?.lastCapturedImageTapped()
     }
 }
 
@@ -76,6 +100,8 @@ extension BottomView: BaseView {
         
         addSubview(captureButton)
         addSubview(lastCapturedImage)
+        
+        lastCapturedImage.addSubview(lastCapturedImageLoading)
     }
     
     func setupConstraints() {
@@ -88,7 +114,12 @@ extension BottomView: BaseView {
             lastCapturedImage.widthAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3),
             lastCapturedImage.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3),
             lastCapturedImage.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
-            lastCapturedImage.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 32)
+            lastCapturedImage.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 32),
+            
+            lastCapturedImageLoading.topAnchor.constraint(equalTo: lastCapturedImage.topAnchor),
+            lastCapturedImageLoading.bottomAnchor.constraint(equalTo: lastCapturedImage.bottomAnchor),
+            lastCapturedImageLoading.leadingAnchor.constraint(equalTo: lastCapturedImage.leadingAnchor),
+            lastCapturedImageLoading.trailingAnchor.constraint(equalTo: lastCapturedImage.trailingAnchor)
         ])
     }
 }

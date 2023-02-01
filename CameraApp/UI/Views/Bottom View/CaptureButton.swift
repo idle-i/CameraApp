@@ -12,7 +12,7 @@ fileprivate struct Constants {
     
     static let circleDefaultInset: CGFloat = 12
     static let circleScale: CGFloat = 8
-    static let circleScaleDuration: Double = 0.3
+    static let circleScaleDuration: Double = 0.2
 }
 
 final class CaptureButton: UIButton {

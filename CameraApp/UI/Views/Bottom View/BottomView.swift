@@ -10,6 +10,7 @@ import UIKit
 protocol BottomViewDelegate {
     func captureButtonTapped()
     func lastCapturedImageTapped()
+    func switchCameraButtonTapped()
 }
 
 final class BottomView: UIView {
@@ -35,7 +36,9 @@ final class BottomView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.white
         view.layer.cornerRadius = 6
+        view.layer.masksToBounds = true
         view.isUserInteractionEnabled = true
+        view.contentMode = .scaleAspectFill
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapLastCapturedImage)))
         
         return view
@@ -48,6 +51,20 @@ final class BottomView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.startAnimating()
         view.isHidden = true
+        
+        return view
+    }()
+    
+    private lazy var switchCameraButton: UIButton = {
+        let view = UIButton()
+        
+        let image = UIImage(systemName: "camera.rotate")
+        view.setImage(image, for: .normal)
+        
+        view.tintColor = UIColor.white
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        view.addTarget(self, action: #selector(didTapSwitchCameraButton), for: .touchUpInside)
+        view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
@@ -68,6 +85,15 @@ final class BottomView: UIView {
         setupConstraints()
     }
     
+    // MARK: - Lifecycle
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let switchCameraButtonSize = switchCameraButton.frame.size
+        switchCameraButton.layer.cornerRadius = max(switchCameraButtonSize.width, switchCameraButtonSize.height) / 2
+    }
+    
     // MARK: - Public Methods
     
     func setLastCapturedImage(_ image: UIImage) {
@@ -80,6 +106,10 @@ final class BottomView: UIView {
         captureButton.isUserInteractionEnabled = !state
     }
     
+    func setSwitchCameraButtonEnabled(_ enabled: Bool) {
+        switchCameraButton.isEnabled = enabled
+    }
+    
     // MARK: - Callbacks
     
     @objc private func didTapCaptureButton() {
@@ -88,6 +118,10 @@ final class BottomView: UIView {
     
     @objc private func didTapLastCapturedImage() {
         delegate?.lastCapturedImageTapped()
+    }
+    
+    @objc private func didTapSwitchCameraButton() {
+        delegate?.switchCameraButtonTapped()
     }
 }
 
@@ -99,9 +133,11 @@ extension BottomView: BaseView {
         backgroundColor = UIColor.black.withAlphaComponent(0.5)
         
         addSubview(captureButton)
-        addSubview(lastCapturedImage)
         
+        addSubview(lastCapturedImage)
         lastCapturedImage.addSubview(lastCapturedImageLoading)
+        
+        addSubview(switchCameraButton)
     }
     
     func setupConstraints() {
@@ -119,7 +155,12 @@ extension BottomView: BaseView {
             lastCapturedImageLoading.topAnchor.constraint(equalTo: lastCapturedImage.topAnchor),
             lastCapturedImageLoading.bottomAnchor.constraint(equalTo: lastCapturedImage.bottomAnchor),
             lastCapturedImageLoading.leadingAnchor.constraint(equalTo: lastCapturedImage.leadingAnchor),
-            lastCapturedImageLoading.trailingAnchor.constraint(equalTo: lastCapturedImage.trailingAnchor)
+            lastCapturedImageLoading.trailingAnchor.constraint(equalTo: lastCapturedImage.trailingAnchor),
+            
+            switchCameraButton.widthAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3),
+            switchCameraButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3),
+            switchCameraButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+            switchCameraButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -32)
         ])
     }
 }

@@ -35,6 +35,7 @@ final class CameraService: NSObject {
     
     private var videoOutput: AVCaptureVideoDataOutput?
     
+    private var captureFromBackCamera: Bool = true
     private var shouldCaptureNextFrame: Bool = false
     
     private var cameraQueue = DispatchQueue(
@@ -70,6 +71,26 @@ final class CameraService: NSObject {
     
     func capturePicture() {
         shouldCaptureNextFrame = true
+    }
+    
+    func switchCamera(_ completion: () -> Void) {
+        cameraQueue.sync {
+            captureSession.beginConfiguration()
+            
+            if let backInput = backInput, let frontInput = frontInput {
+                captureSession.removeInput(captureFromBackCamera ? backInput : frontInput)
+                captureSession.addInput(captureFromBackCamera ? frontInput : backInput)
+            }
+            
+            captureFromBackCamera = !captureFromBackCamera
+            
+            videoOutput?.connections.forEach { $0.isVideoMirrored = !captureFromBackCamera }
+            setVideoOutputOrientation(.portrait)
+            
+            captureSession.commitConfiguration()
+            
+            completion()
+        }
     }
     
     // MARK: - Private Methods
@@ -108,7 +129,7 @@ final class CameraService: NSObject {
         
         captureSession.addOutput(videoOutput!)
         
-        videoOutput?.connections.forEach { $0.videoOrientation = .portrait }
+        setVideoOutputOrientation(.portrait)
     }
     
     private func setupPreviewLayer() {
@@ -118,6 +139,10 @@ final class CameraService: NSObject {
         DispatchQueue.main.async { [weak self] in
             self?.delegate?.previewLayerDidLoad()
         }
+    }
+    
+    private func setVideoOutputOrientation(_ orientation: AVCaptureVideoOrientation) {
+        videoOutput?.connections.forEach { $0.videoOrientation = .portrait }
     }
 }
 

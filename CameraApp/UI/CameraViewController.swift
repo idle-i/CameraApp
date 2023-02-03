@@ -99,6 +99,14 @@ extension CameraViewController: BottomViewDelegate {
 
         present(controller, animated: true)
     }
+    
+    func switchCameraButtonTapped() {
+        bottomView.setSwitchCameraButtonEnabled(false)
+        
+        cameraService.switchCamera {
+            bottomView.setSwitchCameraButtonEnabled(true)
+        }
+    }
 }
 
 extension CameraViewController: CameraServiceDelegate {

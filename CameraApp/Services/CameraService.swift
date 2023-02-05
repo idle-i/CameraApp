@@ -13,6 +13,12 @@ import UIKit
 protocol CameraServiceDelegate {
     func previewLayerDidLoad()
     func didCapturePhoto(image: UIImage)
+    func didChangeZoom()
+}
+
+fileprivate struct Constants {
+    static let defaultZoom: CGFloat = 1.0
+    static let zoomRange: ClosedRange<CGFloat> = 1...20
 }
 
 final class CameraService: NSObject {
@@ -23,10 +29,14 @@ final class CameraService: NSObject {
     
     var previewLayer: AVCaptureVideoPreviewLayer?
     
+    var displayZoom: String { "x\(Int(currentDevice?.videoZoomFactor.rounded() ?? currentZoom))" }
+    
     // MARK: - Private Properties
 
     private var captureSession: AVCaptureSession!
-    
+
+    private var currentDevice: AVCaptureDevice? { captureFromBackCamera ? backCamera : frontCamera }
+
     private var backCamera: AVCaptureDevice?
     private var backInput: AVCaptureInput?
     
@@ -37,6 +47,10 @@ final class CameraService: NSObject {
     
     private var captureFromBackCamera: Bool = true
     private var shouldCaptureNextFrame: Bool = false
+    
+    private var currentZoom: CGFloat = Constants.defaultZoom {
+        didSet { delegate?.didChangeZoom() }
+    }
     
     private var cameraQueue = DispatchQueue(
         label: "com.idle-i.CameraApp.CameraService",
@@ -87,9 +101,28 @@ final class CameraService: NSObject {
             videoOutput?.connections.forEach { $0.isVideoMirrored = !captureFromBackCamera }
             setVideoOutputOrientation(.portrait)
             
+            currentZoom = Constants.defaultZoom
+            
             captureSession.commitConfiguration()
             
             completion()
+        }
+    }
+    
+    func setZoom(_ zoom: CGFloat, isFirstState: Bool) {
+        if isFirstState {
+            currentZoom = currentDevice?.videoZoomFactor ?? currentZoom
+        } else {
+            let newZoom = currentZoom * zoom
+            if Constants.zoomRange.contains(newZoom) {
+                do {
+                    try currentDevice?.lockForConfiguration()
+                    currentDevice?.videoZoomFactor = newZoom
+                    currentDevice?.unlockForConfiguration()
+                } catch {
+                    debugPrint(error.localizedDescription)
+                }
+            }
         }
     }
     

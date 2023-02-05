@@ -29,6 +29,20 @@ final class CameraViewController: UIViewController {
         
         return view
     }()
+    
+    private lazy var zoomLabel: UILabel = {
+        let view = UILabel()
+        
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        view.font = view.font.withSize(16)
+        view.textColor = UIColor.white
+        view.text = cameraService.displayZoom
+        view.textAlignment = .center
+        view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
 
     // MARK: - Lifecycle
     
@@ -45,6 +59,8 @@ final class CameraViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         cameraService.previewLayer?.frame = view.layer.frame
+        
+        zoomLabel.layer.cornerRadius = max(zoomLabel.frame.width, zoomLabel.frame.height) / 2
     }
     
     // MARK: - Private Methods
@@ -67,7 +83,15 @@ final class CameraViewController: UIViewController {
 extension CameraViewController {
     
     func setupView() {
+        view.addGestureRecognizer(
+            UIPinchGestureRecognizer(
+                target: self,
+                action: #selector(didZoom(_:))
+            )
+        )
+        
         view.addSubview(bottomView)
+        view.addSubview(zoomLabel)
     }
     
     func setupConstraints() {
@@ -75,8 +99,22 @@ extension CameraViewController {
             bottomView.heightAnchor.constraint(equalToConstant: 160),
             bottomView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             bottomView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            zoomLabel.widthAnchor.constraint(equalToConstant: 42),
+            zoomLabel.heightAnchor.constraint(equalToConstant: 42),
+            zoomLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            zoomLabel.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: -16)
         ])
+    }
+}
+
+extension CameraViewController {
+
+    @objc private func didZoom(_ gesture: UIPinchGestureRecognizer) {
+        cameraService.setZoom(gesture.scale, isFirstState: gesture.state == .began)
+        
+        zoomLabel.text = cameraService.displayZoom
     }
 }
 
@@ -120,5 +158,9 @@ extension CameraViewController: CameraServiceDelegate {
         
         bottomView.setLastCapturedImage(image)
         bottomView.setCapturingPhotoState(false)
+    }
+    
+    func didChangeZoom() {
+        zoomLabel.text = cameraService.displayZoom
     }
 }

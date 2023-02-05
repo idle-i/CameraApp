@@ -90,6 +90,7 @@ final class BottomView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        // Making switch camera button circle
         let switchCameraButtonSize = switchCameraButton.frame.size
         switchCameraButton.layer.cornerRadius = max(switchCameraButtonSize.width, switchCameraButtonSize.height) / 2
     }

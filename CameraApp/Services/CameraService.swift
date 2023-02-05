@@ -29,6 +29,7 @@ final class CameraService: NSObject {
     
     var previewLayer: AVCaptureVideoPreviewLayer?
     
+    // Formatted string with zoom information
     var displayZoom: String { "x\(Int(currentDevice?.videoZoomFactor.rounded() ?? currentZoom))" }
     
     // MARK: - Private Properties
@@ -46,10 +47,14 @@ final class CameraService: NSObject {
     private var videoOutput: AVCaptureVideoDataOutput?
     
     private var captureFromBackCamera: Bool = true
+    
+    // Turns to `true` after calling the capture method
     private var shouldCaptureNextFrame: Bool = false
     
     private var currentZoom: CGFloat = Constants.defaultZoom {
-        didSet { delegate?.didChangeZoom() }
+        didSet {
+            delegate?.didChangeZoom()
+        }
     }
     
     private var cameraQueue = DispatchQueue(

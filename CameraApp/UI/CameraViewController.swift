@@ -8,7 +8,8 @@
 import UIKit
 
 fileprivate struct Constants {
-    static let vibrationType: UIImpactFeedbackGenerator.FeedbackStyle = .medium
+    static let captureVibrationType: UIImpactFeedbackGenerator.FeedbackStyle = .medium
+    static let cameraSwitchVibrationType: UIImpactFeedbackGenerator.FeedbackStyle = .light
 }
 
 final class CameraViewController: UIViewController {
@@ -73,8 +74,8 @@ final class CameraViewController: UIViewController {
         }
     }
     
-    private func generateVibration() {
-        let generator = UIImpactFeedbackGenerator(style: Constants.vibrationType)
+    private func generateVibration(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
         generator.prepare()
         generator.impactOccurred()
     }
@@ -123,7 +124,7 @@ extension CameraViewController: BottomViewDelegate {
     func captureButtonTapped() {
         bottomView.setCapturingPhotoState(true)
         
-        generateVibration()
+        generateVibration(Constants.captureVibrationType)
         
         cameraService.capturePicture()
     }
@@ -144,6 +145,8 @@ extension CameraViewController: BottomViewDelegate {
         cameraService.switchCamera {
             bottomView.setSwitchCameraButtonEnabled(true)
         }
+        
+        generateVibration(Constants.cameraSwitchVibrationType)
     }
 }
 

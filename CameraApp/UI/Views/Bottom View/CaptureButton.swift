@@ -66,7 +66,9 @@ final class CaptureButton: UIButton {
         
         // Making views circle
         layer.cornerRadius = max(frame.width, frame.height) / 2
-        circleView.layer.cornerRadius = max(circleView.frame.width, circleView.frame.height) / 2
+        
+        let circleViewSize = circleView.frame.size
+        circleView.layer.cornerRadius = max(circleViewSize.width, circleViewSize.height) / 2
     }
     
     // MARK: - Private Methods
